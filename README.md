@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**一键安装 CC Switch + OpenAI Codex CLI + Cloudflare Wrangler CLI**
+**一键安装 CC Switch + OpenAI Codex CLI + Cloudflare Wrangler CLI + Claude Code**
 
 [![GitHub release](https://img.shields.io/github/v/release/10HQ/ai-coding-toolkit)](https://github.com/10HQ/ai-coding-toolkit/releases)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)]()
@@ -19,6 +19,7 @@
 | **CC Switch** | AI 编程 CLI 统一管理台（Claude Code / Codex / Gemini CLI / OpenClaw 等） | [ccswitch.ai](https://ccswitch.ai/zh/) |
 | **OpenAI Codex CLI** | OpenAI 官方命令行 AI 编程助手 | [openai.com/codex](https://openai.com/codex) |
 | **Cloudflare Wrangler CLI** | Cloudflare Workers 开发与部署工具 | [developers.cloudflare.com](https://developers.cloudflare.com/workers/wrangler/) |
+| **Claude Code CLI** | Anthropic 官方 AI 编程助手（支持国内 GLM API 代理） | [anthropic.com/claude-code](https://anthropic.com/claude-code) |
 
 ---
 
@@ -127,19 +128,70 @@ wrangler deploy
 
 ---
 
+### 4. Claude Code CLI
+
+Anthropic 官方 **AI 编程助手**，通过兼容 API 可在国内使用。
+
+**核心功能**：
+- 深度代码理解与重构
+- 多文件项目级编辑
+- 终端内直接对话
+- 支持 MCP 工具扩展
+
+**快速开始**：
+```bash
+# 启动交互模式
+claude
+
+# 单次提问
+claude "帮我优化这段代码"
+
+# 项目级代码审查
+claude "审查当前项目的代码质量"
+```
+
+**配置文件位置**：`~/.claude/settings.json`
+
+#### 🇨🇳 Claude Code 国内配置（使用智谱 GLM API 代理）
+
+创建配置文件 `~/.claude/settings.json`（Windows: `%USERPROFILE%\.claude\settings.json`）：
+
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://open.bigmodel.cn/api/anthropic",
+    "ANTHROPIC_AUTH_TOKEN": "你的智谱API Key",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4-plus",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-4",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-4",
+    "ANTHROPIC_SMALL_FAST_MODEL": "glm-4",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  }
+}
+```
+
+**获取 API Key**：登录 [open.bigmodel.cn](https://open.bigmodel.cn/) → 控制台 → API Key
+
+**注意**：
+- 模型名 `glm-4-plus` / `glm-4` 需在智谱控制台确认可用
+- JSON 格式不能有多余逗号或注释
+- 配置完成后重启终端生效
+
+---
+
 ## 📚 使用场景
 
 ### 场景 1：多 AI 编程工具切换
 使用 **CC Switch** 统一管理多个 AI 编程 CLI 的供应商配置、API Key、MCP 服务器等。
 
 ### 场景 2：本地 AI 辅助编程
-使用 **Codex CLI** 在终端中直接与 AI 对话，生成代码、修复 Bug。
+使用 **Codex CLI** 或 **Claude Code** 在终端中直接与 AI 对话，生成代码、修复 Bug。
 
 ### 场景 3：快速部署到 Cloudflare
 使用 **Wrangler CLI** 将代码部署到 Cloudflare Workers，享受全球边缘网络加速。
 
 ### 场景 4：完整工作流
-1. 用 **Codex CLI** 生成代码
+1. 用 **Claude Code** 或 **Codex CLI** 生成代码
 2. 用 **CC Switch** 管理不同 AI 工具的配置
 3. 用 **Wrangler CLI** 一键部署到 Cloudflare
 
@@ -176,17 +228,25 @@ npm install -g @openai/codex
 npm install -g wrangler
 ```
 
+### 安装 Claude Code CLI
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+安装后按上方"Claude Code 国内配置"章节配置 API。
+
 ---
 
-## 📋 系统要求
+## 💻 系统要求
 
-- **Node.js**: >= 18.0.0（Codex CLI 和 Wrangler CLI 需要）
+- **Node.js**: >= 20.0.0（Codex CLI、Wrangler CLI、Claude Code 需要）
 - **PowerShell**: >= 5.1（Windows 安装脚本需要）
 - **网络连接**: 需要访问 GitHub 和对应服务的 API
 
 ---
 
-## 🐛 常见问题
+## ❓ 常见问题
 
 ### Q: CC Switch 安装失败？
 A: 手动从 [GitHub Releases](https://github.com/farion1231/cc-switch/releases/latest) 下载安装包。
@@ -197,6 +257,15 @@ A: 检查 Node.js 版本（`node --version`），确保 >= 18.0.0。同时需要
 ### Q: Wrangler CLI 部署失败？
 A: 确保已运行 `wrangler login` 完成认证。
 
+### Q: Claude Code 连接失败（国内网络）？
+A: 按 README 中"Claude Code 国内配置"章节配置智谱 GLM API 代理。
+   - 检查 API Key 是否正确
+   - 检查模型名是否在智谱控制台可用
+   - 检查 JSON 配置文件格式是否正确
+
+### Q: Claude Code 报错 "Requires Node.js 20+"？
+A: 升级 Node.js 到 20+ 版本，推荐使用 nvm 管理多版本。
+
 ---
 
 ## 📖 相关文档
@@ -204,6 +273,8 @@ A: 确保已运行 `wrangler login` 完成认证。
 - [CC Switch 官方文档](https://ccswitch.ai/zh/)
 - [Codex CLI 文档](https://developers.openai.com/codex/cli)
 - [Wrangler CLI 文档](https://developers.cloudflare.com/workers/wrangler/)
+- [Claude Code 文档](https://docs.anthropic.com/claude-code)
+- [智谱 GLM API 文档](https://open.bigmodel.cn/dev/api)
 
 ---
 
